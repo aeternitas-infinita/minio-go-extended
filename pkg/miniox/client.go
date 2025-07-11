@@ -169,3 +169,11 @@ func (c *Client) ValidatePath(path string) error {
 
 	return nil
 }
+
+// GetRawClient returns the underlying MinIO client for direct access
+// This allows users to access any native MinIO functionality that may not be wrapped
+// by the extended client. Use with caution as operations performed directly on the
+// raw client will not benefit from the automatic path prefix handling and validation.
+func (c *Client) GetRawClient() *minio.Client {
+	return c.minio
+}

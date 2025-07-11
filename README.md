@@ -125,6 +125,9 @@ type Config struct {
 - `ListBuckets(ctx)` - List all buckets
 - `GetBucketLocation(ctx)` - Get bucket location
 
+#### Raw Client Access
+- `GetRawClient()` - Access the underlying MinIO client for advanced operations
+
 ### Advanced Features
 
 #### Path Management
@@ -209,6 +212,71 @@ if err != nil {
 fmt.Printf("Download link: %s\n", getURL.String())
 ```
 
+### Using Raw MinIO Client
+
+For advanced operations not covered by the extended client, you can access the underlying MinIO client:
+
+```go
+// Get the raw MinIO client
+rawClient := client.GetRawClient()
+
+// Use any native MinIO functionality directly
+// Note: Operations on raw client don't benefit from automatic path prefix handling
+buckets, err := rawClient.ListBuckets(ctx)
+if err != nil {
+    log.Fatal(err)
+}
+
+for _, bucket := range buckets {
+    fmt.Printf("Bucket: %s, Created: %s\n", bucket.Name, bucket.CreationDate)
+}
+
+// Example: Use raw client for operations not yet wrapped
+notification, err := rawClient.GetBucketNotification(ctx, "my-bucket")
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+### Working with Multiple Buckets
+
+Each client instance is configured for a specific bucket. To work with multiple buckets, simply create multiple clients:
+
+```go
+// Client for user uploads
+uploadsConfig := &miniox.Config{
+    Endpoint:      "localhost:9000",
+    AccessKey:     "your-access-key",
+    SecretKey:     "your-secret-key",
+    UseSSL:        false,
+    BucketName:    "user-uploads",
+    BaseDirPrefix: "uploads",
+}
+uploadsClient, err := miniox.New(uploadsConfig)
+
+// Client for application data
+dataConfig := &miniox.Config{
+    Endpoint:      "localhost:9000",
+    AccessKey:     "your-access-key",
+    SecretKey:     "your-secret-key",
+    UseSSL:        false,
+    BucketName:    "app-data",
+    BaseDirPrefix: "data",
+}
+dataClient, err := miniox.New(dataConfig)
+
+// Use each client for its specific bucket
+uploadInfo, err := uploadsClient.PutObject(ctx, "documents/file.pdf", reader, size, opts)
+appData, err := dataClient.GetObject(ctx, "config/settings.json", minio.GetObjectOptions{})
+```
+
+This approach provides several benefits:
+- **Isolation**: Each client handles its own bucket and path prefix
+- **Configuration**: Different settings per bucket (SSL, endpoints, etc.)
+- **Security**: Different credentials per bucket if needed
+- **Performance**: Each client maintains its own connection pool
+- **Clarity**: Code clearly shows which bucket is being used
+
 ## Best Practices
 
 1. **Always use context**: Pass context for proper cancellation and timeouts
@@ -217,6 +285,8 @@ fmt.Printf("Download link: %s\n", getURL.String())
 4. **Validate inputs**: The library validates paths, but validate business logic in your application
 5. **Use presigned URLs for client uploads**: More secure than exposing credentials
 6. **Set reasonable expiry times**: Don't make presigned URLs valid longer than necessary
+7. **Multiple buckets**: Create separate client instances for different buckets - each client is lightweight and manages its own configuration
+8. **Connection reuse**: Clients maintain their own connection pools, so reuse client instances when possible
 
 ## Error Handling
 
