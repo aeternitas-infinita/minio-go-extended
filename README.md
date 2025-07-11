@@ -120,6 +120,13 @@ type Config struct {
 - `GetPresignedPutURL(ctx, path, expiry)` - Generate a presigned PUT URL
 - `GetPublicURL(path)` - Generate a public URL (if configured)
 
+#### Presigned Object Operations
+- `PresignedGetObject(ctx, path, expiry, params)` - Generate presigned GET URL with parameters
+- `PresignedPutObject(ctx, path, expiry)` - Generate presigned PUT URL
+- `PresignedHeadObject(ctx, path, expiry, params)` - Generate presigned HEAD URL
+- `PresignedPostPolicyForUpload(ctx, path, expiry, maxSize)` - Generate POST policy for browser uploads
+- `PresignedPostPolicyWithConditions(ctx, path, expiry, contentType, maxSize)` - Generate POST policy with conditions
+
 #### Bucket Operations
 - `BucketExists(ctx)` - Check if the configured bucket exists
 - `ListBuckets(ctx)` - List all buckets
@@ -210,6 +217,32 @@ if err != nil {
 }
 
 fmt.Printf("Download link: %s\n", getURL.String())
+```
+
+### Advanced Presigned Operations
+
+```go
+// Generate presigned GET URL with custom parameters
+params := url.Values{}
+params.Set("response-content-disposition", "attachment; filename=myfile.pdf")
+getURL, err := client.PresignedGetObject(ctx, "files/document.pdf", time.Hour, params)
+
+// Generate presigned HEAD URL to check object metadata
+headURL, err := client.PresignedHeadObject(ctx, "files/document.pdf", time.Hour, nil)
+
+// Create POST policy for browser-based uploads with size limit (10MB)
+postURL, formData, err := client.PresignedPostPolicyForUpload(ctx, "uploads/file.jpg", time.Hour, 10*1024*1024)
+if err != nil {
+    log.Fatal(err)
+}
+
+fmt.Printf("POST URL: %s\n", postURL.String())
+for key, value := range formData {
+    fmt.Printf("Form field %s: %s\n", key, value)
+}
+
+// Create POST policy with content type restriction
+postURL, formData, err = client.PresignedPostPolicyWithConditions(ctx, "images/photo.jpg", time.Hour, "image/jpeg", 5*1024*1024)
 ```
 
 ### Using Raw MinIO Client

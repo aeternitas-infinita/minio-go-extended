@@ -127,3 +127,91 @@ func (c *Client) ComposeObject(ctx context.Context, destObjectPath string, srcOb
 	uploadInfo.Key = c.stripBasePath(uploadInfo.Key)
 	return uploadInfo, nil
 }
+
+// PresignedGetObject generates a presigned URL for GET operation with automatic path prefix handling
+// This is an alias for GetPresignedURL for consistency with MinIO naming
+func (c *Client) PresignedGetObject(ctx context.Context, objectPath string, expiry time.Duration, reqParams url.Values) (*url.URL, error) {
+	return c.GetPresignedURLWithParams(ctx, objectPath, expiry, reqParams)
+}
+
+// PresignedPutObject generates a presigned URL for PUT operation with automatic path prefix handling
+// This is an alias for GetPresignedPutURL for consistency with MinIO naming
+func (c *Client) PresignedPutObject(ctx context.Context, objectPath string, expiry time.Duration) (*url.URL, error) {
+	return c.GetPresignedPutURL(ctx, objectPath, expiry)
+}
+
+// PresignedHeadObject generates a presigned URL for HEAD operation with automatic path prefix handling
+func (c *Client) PresignedHeadObject(ctx context.Context, objectPath string, expiry time.Duration, reqParams url.Values) (*url.URL, error) {
+	if err := c.ValidatePath(objectPath); err != nil {
+		return nil, err
+	}
+
+	fullPath := c.buildPath(objectPath)
+
+	sloglog.DebugCtx(ctx, "[MinIO] Generating presigned HEAD URL",
+		slog.String("bucket", c.bucketName),
+		slog.String("object", fullPath),
+		slog.Duration("expiry", expiry))
+
+	return c.minio.PresignedHeadObject(ctx, c.bucketName, fullPath, expiry, reqParams)
+}
+
+// PresignedPostPolicyForUpload creates a presigned POST policy for browser-based uploads
+func (c *Client) PresignedPostPolicyForUpload(ctx context.Context, objectPath string, expiry time.Duration, maxSize int64) (*url.URL, map[string]string, error) {
+	if err := c.ValidatePath(objectPath); err != nil {
+		return nil, nil, err
+	}
+
+	fullPath := c.buildPath(objectPath)
+
+	sloglog.DebugCtx(ctx, "[MinIO] Generating presigned POST policy for upload",
+		slog.String("bucket", c.bucketName),
+		slog.String("object", fullPath),
+		slog.Duration("expiry", expiry),
+		slog.Int64("maxSize", maxSize))
+
+	policy := minio.NewPostPolicy()
+	policy.SetBucket(c.bucketName)
+	policy.SetKey(fullPath)
+	policy.SetExpires(time.Now().Add(expiry))
+
+	// Set content length range if specified
+	if maxSize > 0 {
+		policy.SetContentLengthRange(1, maxSize)
+	}
+
+	return c.minio.PresignedPostPolicy(ctx, policy)
+}
+
+// PresignedPostPolicyWithConditions creates a presigned POST policy with custom conditions
+func (c *Client) PresignedPostPolicyWithConditions(ctx context.Context, objectPath string, expiry time.Duration, contentType string, maxSize int64) (*url.URL, map[string]string, error) {
+	if err := c.ValidatePath(objectPath); err != nil {
+		return nil, nil, err
+	}
+
+	fullPath := c.buildPath(objectPath)
+
+	sloglog.DebugCtx(ctx, "[MinIO] Generating presigned POST policy with conditions",
+		slog.String("bucket", c.bucketName),
+		slog.String("object", fullPath),
+		slog.Duration("expiry", expiry),
+		slog.String("contentType", contentType),
+		slog.Int64("maxSize", maxSize))
+
+	policy := minio.NewPostPolicy()
+	policy.SetBucket(c.bucketName)
+	policy.SetKey(fullPath)
+	policy.SetExpires(time.Now().Add(expiry))
+
+	// Set content type if specified
+	if contentType != "" {
+		policy.SetContentType(contentType)
+	}
+
+	// Set content length range if specified
+	if maxSize > 0 {
+		policy.SetContentLengthRange(1, maxSize)
+	}
+
+	return c.minio.PresignedPostPolicy(ctx, policy)
+}

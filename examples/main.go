@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/url"
 	"strings"
 	"time"
 
@@ -121,6 +122,36 @@ func main() {
 	fmt.Println("  uploadsClient, _ := miniox.New(&miniox.Config{BucketName: \"uploads\", ...})")
 	fmt.Println("  dataClient, _ := miniox.New(&miniox.Config{BucketName: \"app-data\", ...})")
 	fmt.Println("Each client manages its own bucket and path prefix independently.")
+
+	// Example 9: Advanced presigned operations
+	fmt.Println("\n=== Example 9: Advanced presigned operations ===")
+
+	// Presigned GET with custom parameters
+	params := url.Values{}
+	params.Set("response-content-disposition", "attachment; filename=hello.txt")
+	presignedGetURL, err := client.PresignedGetObject(ctx, "documents/hello.txt", time.Hour, params)
+	if err != nil {
+		log.Printf("Failed to generate presigned GET URL: %v", err)
+	} else {
+		fmt.Printf("Presigned GET URL with custom params: %s\n", presignedGetURL.String())
+	}
+
+	// Presigned HEAD operation
+	presignedHeadURL, err := client.PresignedHeadObject(ctx, "documents/hello.txt", time.Hour, nil)
+	if err != nil {
+		log.Printf("Failed to generate presigned HEAD URL: %v", err)
+	} else {
+		fmt.Printf("Presigned HEAD URL: %s\n", presignedHeadURL.String())
+	}
+
+	// POST policy for browser uploads
+	postURL, formData, err := client.PresignedPostPolicyForUpload(ctx, "uploads/browser-upload.txt", time.Hour, 1024*1024) // 1MB limit
+	if err != nil {
+		log.Printf("Failed to generate POST policy: %v", err)
+	} else {
+		fmt.Printf("POST upload URL: %s\n", postURL.String())
+		fmt.Printf("Form data fields: %d\n", len(formData))
+	}
 
 	fmt.Println("\n=== All examples completed ===")
 }
