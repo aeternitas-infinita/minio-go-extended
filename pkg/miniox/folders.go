@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/aeternitas-infinita/sloglog"
+	"github.com/aeternitas-infinita/rmlog"
 	"github.com/minio/minio-go/v7"
 )
 
@@ -18,7 +18,7 @@ func (c *Client) FolderExists(ctx context.Context, folderPath string) (bool, err
 	fullPath := c.buildPath(folderPath)
 	filePath := fullPath + "/.empty"
 
-	sloglog.DebugCtx(ctx, "[MinIO] Checking folder existence",
+	rmlog.DebugCtx(ctx, "[MinIO] Checking folder existence",
 		slog.String("bucket", c.bucketName),
 		slog.String("folder", fullPath))
 
@@ -48,7 +48,7 @@ func (c *Client) CreateFolder(ctx context.Context, folderPath string) error {
 	fullPath := c.buildPath(folderPath)
 	filePath := fullPath + "/.empty"
 
-	sloglog.DebugCtx(ctx, "[MinIO] Creating folder",
+	rmlog.DebugCtx(ctx, "[MinIO] Creating folder",
 		slog.String("bucket", c.bucketName),
 		slog.String("folder", fullPath))
 
@@ -67,7 +67,7 @@ func (c *Client) RemoveFolder(ctx context.Context, folderPath string) error {
 		fullPath += "/"
 	}
 
-	sloglog.DebugCtx(ctx, "[MinIO] Removing folder",
+	rmlog.DebugCtx(ctx, "[MinIO] Removing folder",
 		slog.String("bucket", c.bucketName),
 		slog.String("folder", fullPath))
 
@@ -82,7 +82,7 @@ func (c *Client) RemoveFolder(ctx context.Context, folderPath string) error {
 	// Check for errors during removal
 	for removeErr := range errorCh {
 		if removeErr.Err != nil {
-			sloglog.ErrorCtx(ctx, "[MinIO] Error removing object during folder deletion",
+			rmlog.ErrorCtx(ctx, "[MinIO] Error removing object during folder deletion",
 				slog.String("object", removeErr.ObjectName),
 				slog.Any("error", removeErr.Err))
 			return removeErr.Err
@@ -105,7 +105,7 @@ func (c *Client) ListFolders(ctx context.Context, prefix string) ([]string, erro
 		fullPrefix += "/"
 	}
 
-	sloglog.DebugCtx(ctx, "[MinIO] Listing folders",
+	rmlog.DebugCtx(ctx, "[MinIO] Listing folders",
 		slog.String("bucket", c.bucketName),
 		slog.String("prefix", fullPrefix))
 

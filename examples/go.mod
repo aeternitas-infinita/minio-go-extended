@@ -8,7 +8,7 @@ require (
 )
 
 require (
-	github.com/aeternitas-infinita/sloglog v0.1.10 // indirect
+	github.com/aeternitas-infinita/rmlog v0.1.10 // indirect
 	github.com/andybalholm/brotli v1.2.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/go-ini/ini v1.67.0 // indirect

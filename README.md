@@ -159,13 +159,13 @@ if err != nil {
 ```
 
 #### Logging
-The library uses structured logging. You can configure the log level through the `sloglog` package:
+The library uses structured logging. You can configure the log level through the `rmlog` package:
 
 ```go
-import "github.com/aeternitas-infinita/sloglog"
+import "github.com/aeternitas-infinita/rmlog"
 
 // Set log level to debug for detailed operation logs
-sloglog.SetLevel(slog.LevelDebug)
+rmlog.SetLevel(slog.LevelDebug)
 ```
 
 ## Examples

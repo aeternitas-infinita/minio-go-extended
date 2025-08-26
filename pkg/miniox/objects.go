@@ -5,7 +5,7 @@ import (
 	"io"
 	"log/slog"
 
-	"github.com/aeternitas-infinita/sloglog"
+	"github.com/aeternitas-infinita/rmlog"
 	"github.com/minio/minio-go/v7"
 )
 
@@ -16,7 +16,7 @@ func (c *Client) StatObject(ctx context.Context, objectPath string, opts minio.S
 	}
 
 	fullPath := c.buildPath(objectPath)
-	sloglog.DebugCtx(ctx, "[MinIO] Getting object info",
+	rmlog.DebugCtx(ctx, "[MinIO] Getting object info",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath))
 
@@ -37,7 +37,7 @@ func (c *Client) GetObject(ctx context.Context, objectPath string, opts minio.Ge
 	}
 
 	fullPath := c.buildPath(objectPath)
-	sloglog.DebugCtx(ctx, "[MinIO] Getting object",
+	rmlog.DebugCtx(ctx, "[MinIO] Getting object",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath))
 
@@ -51,7 +51,7 @@ func (c *Client) PutObject(ctx context.Context, objectPath string, reader io.Rea
 	}
 
 	fullPath := c.buildPath(objectPath)
-	sloglog.DebugCtx(ctx, "[MinIO] Putting object",
+	rmlog.DebugCtx(ctx, "[MinIO] Putting object",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath),
 		slog.Int64("size", objectSize))
@@ -73,7 +73,7 @@ func (c *Client) RemoveObject(ctx context.Context, objectPath string, opts minio
 	}
 
 	fullPath := c.buildPath(objectPath)
-	sloglog.DebugCtx(ctx, "[MinIO] Removing object",
+	rmlog.DebugCtx(ctx, "[MinIO] Removing object",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath))
 
@@ -93,7 +93,7 @@ func (c *Client) ListObjects(ctx context.Context, prefix string, recursive bool)
 	}
 
 	fullPrefix := c.buildPath(prefix)
-	sloglog.DebugCtx(ctx, "[MinIO] Listing objects",
+	rmlog.DebugCtx(ctx, "[MinIO] Listing objects",
 		slog.String("bucket", c.bucketName),
 		slog.String("prefix", fullPrefix),
 		slog.Bool("recursive", recursive))
@@ -133,7 +133,7 @@ func (c *Client) CopyObject(ctx context.Context, destObjectPath string, srcObjec
 	fullDestPath := c.buildPath(destObjectPath)
 	fullSrcPath := c.buildPath(srcObjectPath)
 
-	sloglog.DebugCtx(ctx, "[MinIO] Copying object",
+	rmlog.DebugCtx(ctx, "[MinIO] Copying object",
 		slog.String("bucket", c.bucketName),
 		slog.String("src", fullSrcPath),
 		slog.String("dest", fullDestPath))

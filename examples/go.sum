@@ -1,5 +1,5 @@
-github.com/aeternitas-infinita/sloglog v0.1.10 h1:V8FzRP1TWOQM5Wkx2WWx4NfcpvtteSzX8ueIBxJcDzI=
-github.com/aeternitas-infinita/sloglog v0.1.10/go.mod h1:i+dGYa96f+M7nB3NffiRhsvqoOVfGmsT17RLbBqqRNI=
+github.com/aeternitas-infinita/rmlog v0.1.10 h1:V8FzRP1TWOQM5Wkx2WWx4NfcpvtteSzX8ueIBxJcDzI=
+github.com/aeternitas-infinita/rmlog v0.1.10/go.mod h1:i+dGYa96f+M7nB3NffiRhsvqoOVfGmsT17RLbBqqRNI=
 github.com/andybalholm/brotli v1.2.0 h1:ukwgCxwYrmACq68yiUqwIWnGY0cTPox/M94sVwToPjQ=
 github.com/andybalholm/brotli v1.2.0/go.mod h1:rzTDkvFWvIrjDXZHkuS16NPggd91W3kUSvPlQ1pLaKY=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
