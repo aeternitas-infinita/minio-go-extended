@@ -18,7 +18,7 @@ func (c *Client) FolderExists(ctx context.Context, folderPath string) (bool, err
 	fullPath := c.buildPath(folderPath)
 	filePath := fullPath + "/.empty"
 
-	rmlog.DebugCtx(ctx, "[MinIO] Checking folder existence",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Checking folder existence",
 		slog.String("bucket", c.bucketName),
 		slog.String("folder", fullPath))
 
@@ -48,7 +48,7 @@ func (c *Client) CreateFolder(ctx context.Context, folderPath string) error {
 	fullPath := c.buildPath(folderPath)
 	filePath := fullPath + "/.empty"
 
-	rmlog.DebugCtx(ctx, "[MinIO] Creating folder",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Creating folder",
 		slog.String("bucket", c.bucketName),
 		slog.String("folder", fullPath))
 
@@ -67,7 +67,7 @@ func (c *Client) RemoveFolder(ctx context.Context, folderPath string) error {
 		fullPath += "/"
 	}
 
-	rmlog.DebugCtx(ctx, "[MinIO] Removing folder",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Removing folder",
 		slog.String("bucket", c.bucketName),
 		slog.String("folder", fullPath))
 
@@ -82,9 +82,6 @@ func (c *Client) RemoveFolder(ctx context.Context, folderPath string) error {
 	// Check for errors during removal
 	for removeErr := range errorCh {
 		if removeErr.Err != nil {
-			rmlog.ErrorCtx(ctx, "[MinIO] Error removing object during folder deletion",
-				slog.String("object", removeErr.ObjectName),
-				slog.Any("error", removeErr.Err))
 			return removeErr.Err
 		}
 	}
@@ -105,7 +102,7 @@ func (c *Client) ListFolders(ctx context.Context, prefix string) ([]string, erro
 		fullPrefix += "/"
 	}
 
-	rmlog.DebugCtx(ctx, "[MinIO] Listing folders",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Listing folders",
 		slog.String("bucket", c.bucketName),
 		slog.String("prefix", fullPrefix))
 

@@ -20,7 +20,7 @@ func (c *Client) GetPresignedURL(ctx context.Context, objectPath string, expiry 
 
 	fullPath := c.buildPath(objectPath)
 
-	rmlog.DebugCtx(ctx, "[MinIO] Generating presigned GET URL",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Generating presigned GET URL",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath),
 		slog.Duration("expiry", expiry))
@@ -36,7 +36,7 @@ func (c *Client) GetPresignedURLWithParams(ctx context.Context, objectPath strin
 
 	fullPath := c.buildPath(objectPath)
 
-	rmlog.DebugCtx(ctx, "[MinIO] Generating presigned GET URL with params",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Generating presigned GET URL with params",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath),
 		slog.Duration("expiry", expiry))
@@ -52,7 +52,7 @@ func (c *Client) GetPresignedPutURL(ctx context.Context, objectPath string, expi
 
 	fullPath := c.buildPath(objectPath)
 
-	rmlog.DebugCtx(ctx, "[MinIO] Generating presigned PUT URL",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Generating presigned PUT URL",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath),
 		slog.Duration("expiry", expiry))
@@ -62,7 +62,7 @@ func (c *Client) GetPresignedPutURL(ctx context.Context, objectPath string, expi
 
 // GetPresignedPostPolicy generates a presigned POST policy with automatic path prefix handling
 func (c *Client) GetPresignedPostPolicy(ctx context.Context, policy *minio.PostPolicy) (*url.URL, map[string]string, error) {
-	rmlog.DebugCtx(ctx, "[MinIO] Generating presigned POST policy",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Generating presigned POST policy",
 		slog.String("bucket", c.bucketName))
 
 	// Note: PostPolicy object key should be set with prefix applied before calling this method
@@ -109,7 +109,7 @@ func (c *Client) ComposeObject(ctx context.Context, destObjectPath string, srcOb
 		}
 	}
 
-	rmlog.DebugCtx(ctx, "[MinIO] Composing object",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Composing object",
 		slog.String("bucket", c.bucketName),
 		slog.String("dest", fullDestPath),
 		slog.Int("sources", len(srcObjects)))
@@ -148,7 +148,7 @@ func (c *Client) PresignedHeadObject(ctx context.Context, objectPath string, exp
 
 	fullPath := c.buildPath(objectPath)
 
-	rmlog.DebugCtx(ctx, "[MinIO] Generating presigned HEAD URL",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Generating presigned HEAD URL",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath),
 		slog.Duration("expiry", expiry))
@@ -164,7 +164,7 @@ func (c *Client) PresignedPostPolicyForUpload(ctx context.Context, objectPath st
 
 	fullPath := c.buildPath(objectPath)
 
-	rmlog.DebugCtx(ctx, "[MinIO] Generating presigned POST policy for upload",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Generating presigned POST policy for upload",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath),
 		slog.Duration("expiry", expiry),
@@ -191,7 +191,7 @@ func (c *Client) PresignedPostPolicyWithConditions(ctx context.Context, objectPa
 
 	fullPath := c.buildPath(objectPath)
 
-	rmlog.DebugCtx(ctx, "[MinIO] Generating presigned POST policy with conditions",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Generating presigned POST policy with conditions",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath),
 		slog.Duration("expiry", expiry),

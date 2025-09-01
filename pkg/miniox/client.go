@@ -60,14 +60,12 @@ func New(config *Config) (*Client, error) {
 		Secure: config.UseSSL,
 	})
 	if err != nil {
-		rmlog.Error("error while creating minio client", slog.Any("error", err))
 		return nil, fmt.Errorf("failed to create MinIO client: %w", err)
 	}
 
 	// Check if bucket exists
 	exists, err := client.BucketExists(context.Background(), config.BucketName)
 	if err != nil {
-		rmlog.Error("error checking bucket existence", slog.Any("error", err))
 		return nil, fmt.Errorf("failed to check bucket existence: %w", err)
 	}
 
@@ -82,7 +80,7 @@ func New(config *Config) (*Client, error) {
 		publicBaseURL: config.PublicURL,
 	}
 
-	rmlog.Info("[MinIO] successfully connected to MinIO",
+	rmlog.InfoMin("[MinIO] successfully connected to MinIO",
 		slog.String("endpoint", config.Endpoint),
 		slog.String("bucket", config.BucketName))
 

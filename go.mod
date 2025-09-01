@@ -3,7 +3,7 @@ module github.com/aeternitas-infinita/minio-go-extended
 go 1.25
 
 require (
-	github.com/aeternitas-infinita/rmlog v0.0.2
+	github.com/aeternitas-infinita/rmlog v0.0.8
 	github.com/minio/minio-go/v7 v7.0.95
 )
 

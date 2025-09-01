@@ -18,7 +18,7 @@ func (c *Client) GetObjectTagging(ctx context.Context, objectPath string, opts m
 
 	fullPath := c.buildPath(objectPath)
 
-	rmlog.DebugCtx(ctx, "[MinIO] Getting object tags",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Getting object tags",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath))
 
@@ -33,7 +33,7 @@ func (c *Client) PutObjectTagging(ctx context.Context, objectPath string, object
 
 	fullPath := c.buildPath(objectPath)
 
-	rmlog.DebugCtx(ctx, "[MinIO] Setting object tags",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Setting object tags",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath))
 
@@ -48,7 +48,7 @@ func (c *Client) RemoveObjectTagging(ctx context.Context, objectPath string, opt
 
 	fullPath := c.buildPath(objectPath)
 
-	rmlog.DebugCtx(ctx, "[MinIO] Removing object tags",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Removing object tags",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath))
 
@@ -63,7 +63,7 @@ func (c *Client) GetObjectRetention(ctx context.Context, objectPath string, vers
 
 	fullPath := c.buildPath(objectPath)
 
-	rmlog.DebugCtx(ctx, "[MinIO] Getting object retention",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Getting object retention",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath),
 		slog.String("versionID", versionID))
@@ -79,7 +79,7 @@ func (c *Client) PutObjectRetention(ctx context.Context, objectPath string, opts
 
 	fullPath := c.buildPath(objectPath)
 
-	rmlog.DebugCtx(ctx, "[MinIO] Setting object retention",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Setting object retention",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath))
 
@@ -94,7 +94,7 @@ func (c *Client) GetObjectLegalHold(ctx context.Context, objectPath string, opts
 
 	fullPath := c.buildPath(objectPath)
 
-	rmlog.DebugCtx(ctx, "[MinIO] Getting object legal hold",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Getting object legal hold",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath))
 
@@ -109,7 +109,7 @@ func (c *Client) PutObjectLegalHold(ctx context.Context, objectPath string, opts
 
 	fullPath := c.buildPath(objectPath)
 
-	rmlog.DebugCtx(ctx, "[MinIO] Setting object legal hold",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Setting object legal hold",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath))
 
@@ -123,7 +123,7 @@ func (c *Client) SelectObjectContent(ctx context.Context, objectPath string, opt
 
 	fullPath := c.buildPath(objectPath)
 
-	rmlog.DebugCtx(ctx, "[MinIO] Selecting object content",
+	rmlog.DebugCtxMin(ctx, "[MinIO] Selecting object content",
 		slog.String("bucket", c.bucketName),
 		slog.String("object", fullPath))
 
